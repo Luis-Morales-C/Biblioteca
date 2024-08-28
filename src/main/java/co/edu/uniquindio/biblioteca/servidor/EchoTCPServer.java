@@ -17,7 +17,7 @@ public class EchoTCPServer {
 
     public EchoTCPServer(PrincipalServidor ps) {
         serv = ps;
-        System.out.println("Servidor ejecutandose en el puerto : " + PORT);
+        System.out.println("Servidor ejecutándose en el puerto: " + PORT);
     }
 
     public void init() throws Exception {
@@ -25,20 +25,29 @@ public class EchoTCPServer {
         serverSideSocket = listener.accept();
         createStreams(serverSideSocket);
         protocol(serverSideSocket);
-
     }
 
+    public void protocol(Socket socket) throws IOException {
+        String message;
+        while ((message = fromNetwork.readLine()) != null) {
+            System.out.println("El Cliente dice: " + message);
 
-    public void protocol(Socket socket) throws Exception {
-        String message = fromNetwork.readLine();
-        System.out.println("El Cliente dice: " + message);
 
-        String answer = "Si sr, lo escucho";
+            String[] partes = message.split(";");
+            if (partes.length == 3 && "autenticar".equals(partes[0])) {
+                String cedula = partes[1];
+                String contrasena = partes[2];
 
-        toNetwork.println(answer);
+                if (serv.autenticarEstudiante(cedula, contrasena)) {
+                    responder("OK");
+                } else {
+                    responder("Error");
+                }
+            }
+        }
     }
 
-    private void createStreams(Socket socket) throws Exception {
+    private void createStreams(Socket socket) throws IOException {
         toNetwork = new PrintWriter(socket.getOutputStream(), true);
         fromNetwork = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
@@ -46,5 +55,4 @@ public class EchoTCPServer {
     private void responder(String res) {
         toNetwork.println(res);
     }
-
 }
