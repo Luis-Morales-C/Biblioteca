@@ -3,12 +3,12 @@ package co.edu.uniquindio.biblioteca.cliente;
 import co.edu.uniquindio.biblioteca.MainApp;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 public class PrincipalCliente extends Application {
 
-    private MainApp mainApp;
-
+    private MainApp mainApp = new MainApp();
     private EchoTCPClient cliente;
     private static PrincipalCliente instance;
 
@@ -21,7 +21,6 @@ public class PrincipalCliente extends Application {
         instance = this;
         cliente = new EchoTCPClient();
         cliente.init();
-
         mainApp.setPrimaryStage(primaryStage);
         mainApp.showLoginScreen();
     }
@@ -34,4 +33,6 @@ public class PrincipalCliente extends Application {
         return instance;
     }
 }
+
+
 

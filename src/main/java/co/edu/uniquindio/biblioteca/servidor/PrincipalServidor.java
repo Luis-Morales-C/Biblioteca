@@ -9,20 +9,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class PrincipalServidor {
     private EchoTCPServer server;
     private List<Estudiante> listaEstudiantes;
     private List<Libro> listaLibros;
-    private ArrayList<Cuenta> ListaCuentas;
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         PrincipalServidor ps = new PrincipalServidor();
         ps.cargarDatosEstudiantes();
         ps.cargarDatosLibros();
-        ps.agregarEstudiante("1091887","123");
-        ps.agregarLibro("1", "El Quijote", "Miguel de Cervantes", "Novela", true);
-
-
         ps.startServer();
     }
 
@@ -40,34 +45,6 @@ public class PrincipalServidor {
         }
     }
 
-    public void guardarDatosEstudiantes() {
-        try {
-            ArchivoEstudiantes.guardarEstudiantes(listaEstudiantes);
-        } catch (IOException e) {
-            System.err.println("Error al guardar datos de estudiantes: " + e.getMessage());
-        }
-    }
-
-    public boolean autenticarEstudiante(String cedula, String contrasena) {
-        return listaEstudiantes.stream()
-                .anyMatch(est -> est.getCodigo().equals(cedula) && est.getContrasena().equals(contrasena));
-    }
-
-    public void agregarEstudiante(String cedula, String contrasena) {
-        if (listaEstudiantes.stream().noneMatch(est -> est.getCodigo().equals(cedula))) {
-            listaEstudiantes.add(new Estudiante(cedula, contrasena));
-            guardarDatosEstudiantes(); // Guardar después de agregar un estudiante
-        } else {
-            System.err.println("El estudiante con cédula " + cedula + " ya existe.");
-        }
-    }
-    public void guardarDatosLibros() {
-        try {
-            ArchivoLibros.guardarLibros(listaLibros);
-        } catch (IOException e) {
-            System.err.println("Error al guardar datos de libros: " + e.getMessage());
-        }
-    }
     private void cargarDatosLibros() {
         try {
             listaLibros = ArchivoLibros.cargarLibros();
@@ -76,14 +53,65 @@ public class PrincipalServidor {
             listaLibros = new ArrayList<>();
         }
     }
-    public void agregarLibro(String id, String titulo, String autor, String tema, boolean disponible) {
-        if (listaLibros.stream().noneMatch(libro -> libro.getId().equals(id))) {
-            listaLibros.add(new Libro(id, titulo, autor, tema, disponible));
-            guardarDatosLibros(); // Guardar después de agregar un libro
-        } else {
-            System.err.println("El libro con ID " + id + " ya existe.");
+
+    public boolean autenticarEstudiante(String cedula, String contrasena) {
+        return listaEstudiantes.stream()
+                .anyMatch(est -> est.getCodigo().equals(cedula) && est.getContrasena().equals(contrasena));
+    }
+
+    public boolean cambiarContrasena(String cedula, String nuevaContrasena) {
+        for (Estudiante est : listaEstudiantes) {
+            if (est.getCodigo().equals(cedula)) {
+                est.setContrasena(nuevaContrasena);
+                guardarDatosEstudiantes();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void guardarDatosEstudiantes() {
+        try {
+            ArchivoEstudiantes.guardarEstudiantes(listaEstudiantes);
+        } catch (IOException e) {
+            System.err.println("Error al guardar datos de estudiantes: " + e.getMessage());
+        }
+    }
+
+    public List<Libro> consultarPorAutor(String autor) {
+        return listaLibros.stream()
+                .filter(libro -> libro.getAutor().toLowerCase().contains(autor.toLowerCase()))
+                .toList();
+    }
+
+    public List<Libro> consultarPorGenero(String genero) {
+        return listaLibros.stream()
+                .filter(libro -> libro.getTema().toLowerCase().contains(genero.toLowerCase()))
+                .toList();
+    }
+
+    public List<Libro> consultarPorNombre(String nombre) {
+        return listaLibros.stream()
+                .filter(libro -> libro.getTitulo().toLowerCase().contains(nombre.toLowerCase()))
+                .toList();
+    }
+
+    public boolean reservarLibro(String idLibro) {
+        for (Libro libro : listaLibros) {
+            if (libro.getId().equals(idLibro) && libro.isDisponible()) {
+                libro.setDisponible(false);
+                guardarDatosLibros();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void guardarDatosLibros() {
+        try {
+            ArchivoLibros.guardarLibros(listaLibros);
+        } catch (IOException e) {
+            System.err.println("Error al guardar datos de libros: " + e.getMessage());
         }
     }
 }
-
-

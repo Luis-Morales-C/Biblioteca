@@ -7,13 +7,18 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 public class EchoTCPClient {
     private static final String SERVER = "localhost";
     private static final int PORT = 3400;
 
     private PrintWriter toNetwork;
     private BufferedReader fromNetwork;
-
     private Socket clientSideSocket;
 
     public EchoTCPClient() {
@@ -38,4 +43,6 @@ public class EchoTCPClient {
         fromNetwork = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 }
+
+
 
