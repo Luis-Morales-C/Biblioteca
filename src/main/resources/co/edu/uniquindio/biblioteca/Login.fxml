@@ -4,14 +4,22 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.biblioteca.controller.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="402.0" style="-fx-background-color: #ffffff; -fx-border-color: #51AFF7; -fx-border-width: 3px;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.biblioteca.controller.LoginController">
    <children>
-      <Label layoutX="200.0" layoutY="23.0" prefHeight="17.0" prefWidth="142.0" text="Bienvenido Estudiante" />
-      <Button layoutX="248.0" layoutY="213.0" mnemonicParsing="false" onAction="#loginAction" text="Ingresar" />
-      <TextField fx:id="txtContrasena" layoutX="200.0" layoutY="160.0" />
-      <TextField fx:id="txtCedula" layoutX="200.0" layoutY="97.0" promptText="ej:1091392" />
-      <Label layoutX="200.0" layoutY="70.0" prefHeight="17.0" prefWidth="142.0" text="Ingrese su cedula:" />
-      <Label layoutX="200.0" layoutY="133.0" prefHeight="17.0" prefWidth="142.0" text="Ingrese su contraseña:" />
+      <Label layoutX="15.0" layoutY="14.0" prefHeight="54.0" prefWidth="394.0" text="Bienvenido Estudiante">
+         <font>
+            <Font name="Bookman Old Style" size="34.0" />
+         </font></Label>
+      <Button layoutX="149.0" layoutY="288.0" mnemonicParsing="false" onAction="#loginAction" prefHeight="39.0" prefWidth="104.0" style="-fx-background-color: #51AFF7;" text="Ingresar" />
+      <TextField fx:id="txtContrasena" layoutX="110.0" layoutY="210.0" prefHeight="25.0" prefWidth="204.0" style="-fx-border-color: #51AFF7;" />
+      <TextField fx:id="txtCedula" layoutX="110.0" layoutY="127.0" prefHeight="25.0" prefWidth="204.0" promptText="ej:1091392" style="-fx-border-color: #51AFF7;" />
+      <Label layoutX="149.0" layoutY="99.0" prefHeight="17.0" prefWidth="142.0" text="Ingrese su cedula:" />
+      <Label layoutX="141.0" layoutY="182.0" prefHeight="17.0" prefWidth="142.0" text="Ingrese su contraseña:" />
+
+      <!-- Botón para cambiar la contraseña -->
+      <Button layoutX="120.0" layoutY="335.0" mnemonicParsing="false" onAction="#handleCambiarContrasena" prefHeight="39.0" prefWidth="162.0" style="-fx-background-color: #51AFF7;" text="Cambiar Contraseña" />
+
    </children>
 </AnchorPane>

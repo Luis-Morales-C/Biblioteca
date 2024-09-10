@@ -18,6 +18,7 @@ import java.util.List;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PrincipalServidor {
     private EchoTCPServer server;
@@ -87,7 +88,7 @@ public class PrincipalServidor {
     public List<Libro> consultarPorGenero(String genero) {
         return listaLibros.stream()
                 .filter(libro -> libro.getTema().toLowerCase().contains(genero.toLowerCase()))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public List<Libro> consultarPorNombre(String nombre) {

@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 
 public class PrincipalCliente extends Application {
 
+//1. Verificar  que la cedula exista, con la contraseña ingresada
+    //2. reescribir la contraseña
+
     private MainApp mainApp = new MainApp();
     private EchoTCPClient cliente;
     private static PrincipalCliente instance;

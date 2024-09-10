@@ -2,18 +2,20 @@ package co.edu.uniquindio.biblioteca.controller;
 
 import co.edu.uniquindio.biblioteca.MainApp;
 import co.edu.uniquindio.biblioteca.cliente.EchoTCPClient;
+
+
 import co.edu.uniquindio.biblioteca.cliente.PrincipalCliente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextField;
+import java.io.IOException;
 
 public class LoginController {
 
@@ -39,7 +41,7 @@ public class LoginController {
             System.out.println("Respuesta del servidor:" + response);
 
             if ("OK".equals(response)) {
-                MainApp.mostrarInicio();
+                MainApp.mostrarInicio(); // Método para mostrar la pantalla principal si la autenticación es exitosa
             } else {
                 showAlert(AlertType.ERROR, "Error de Autenticación", "Credenciales incorrectas.");
             }
@@ -49,6 +51,27 @@ public class LoginController {
         }
     }
 
+    // Nuevo método para manejar el evento del botón "Cambiar Contraseña"
+
+    @FXML
+    private void handleCambiarContrasena(ActionEvent event) {
+        try {
+            // Cargar el archivo FXML de la ventana de cambiar contraseña
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/biblioteca/CambiarContrasena.fxml"));
+            Parent root = loader.load();
+
+            // Crear una nueva ventana
+            Stage stage = new Stage();
+            stage.setTitle("Cambiar Contraseña");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(AlertType.ERROR, "Error", "No se pudo abrir la ventana de cambio de contraseña.");
+        }
+    }
+
+    // Método auxiliar para mostrar alertas
     private void showAlert(AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -57,3 +80,4 @@ public class LoginController {
         alert.showAndWait();
     }
 }
+

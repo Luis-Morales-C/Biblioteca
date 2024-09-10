@@ -6,12 +6,16 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="456.0" prefWidth="739.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.biblioteca.controller.InicioController">
+<AnchorPane prefHeight="456.0" prefWidth="739.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.biblioteca.controller.InicioController">
    <children>
-      <Label layoutX="288.0" layoutY="14.0" prefHeight="22.0" prefWidth="67.0" text="Bienvenido" />
-      <TableView fx:id="tableLibros" layoutX="265.0" layoutY="68.0" prefHeight="200.0" prefWidth="465.0">
+      <Label layoutX="312.0" layoutY="-61.0" prefHeight="182.0" prefWidth="313.0" text="Biblioteca">
+         <font>
+            <Font name="Beautiful Lovina Regular" size="69.0" />
+         </font></Label>
+      <TableView fx:id="tableLibros" layoutX="247.0" layoutY="99.0" prefHeight="200.0" prefWidth="465.0" style="-fx-border-color: #51AFF7; -fx-border-width: 3px;">
         <columns>
           <TableColumn fx:id="colId" prefWidth="38.0" text="Id" />
           <TableColumn fx:id="colTitulo" prefWidth="139.0" text="titulo" />
@@ -20,16 +24,15 @@
             <TableColumn fx:id="colDisponible" prefWidth="64.0" text="disponible" />
         </columns>
       </TableView>
-      <Button fx:id="btnReservar" layoutX="449.0" layoutY="291.0" mnemonicParsing="false" onAction="#reservar" text="Reservar" />
-      <Text layoutX="14.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultar nombre:" wrappingWidth="133.13671875" />
+      <Button fx:id="btnReservar" layoutX="405.0" layoutY="352.0" mnemonicParsing="false" onAction="#reservar" prefHeight="43.0" prefWidth="149.0" style="-fx-background-color: #51AFF7;" text="Reservar" />
+      <Text layoutX="74.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultar nombre:" wrappingWidth="133.13671875" />
       <TextField fx:id="txtNombre" layoutX="12.0" layoutY="96.0" />
-      <Text layoutX="14.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultar genero:" wrappingWidth="133.13671875" />
-      <Text layoutX="14.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultar autor:" wrappingWidth="133.13671875" />
-      <TextField fx:id="txtGenero" layoutX="12.0" layoutY="156.0" />
-      <TextField fx:id="txtAutor" layoutX="12.0" layoutY="216.0" />
-      <Button fx:id="btnConsultarNombre" layoutX="167.0" layoutY="96.0" mnemonicParsing="false" onAction="#consultarPorNombre" text="Consultar" />
-      <Button fx:id="btnConsultarGenero" layoutX="167.0" layoutY="156.0" mnemonicParsing="false" onAction="#ConsultarPorGenero" text="Consultar" />
-      <Button fx:id="btnConsultarAutor" layoutX="167.0" layoutY="216.0" mnemonicParsing="false" onAction="#ConsultarPorAutor" text="Consultar" />
-      <Label fx:id="labelRespuesta" layoutX="35.0" layoutY="304.0" prefHeight="112.0" prefWidth="341.0" />
+      <Text layoutX="74.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultar genero:" wrappingWidth="133.13671875" />
+      <Text layoutX="87.0" layoutY="224.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultar autor:" wrappingWidth="133.13671875" />
+      <TextField fx:id="txtGenero" layoutX="13.0" layoutY="168.0" />
+      <TextField fx:id="txtAutor" layoutX="12.0" layoutY="246.0" />
+      <Button fx:id="btnConsultarNombre" layoutX="167.0" layoutY="96.0" mnemonicParsing="false" onAction="#consultarPorNombre" style="-fx-background-color: #51AFF7;" text="Consultar" />
+      <Button fx:id="btnConsultarGenero" layoutX="167.0" layoutY="167.0" mnemonicParsing="false" onAction="#ConsultarPorGenero" style="-fx-background-color: #51AFF7;" text="Consultar" />
+      <Button fx:id="btnConsultarAutor" layoutX="167.0" layoutY="246.0" mnemonicParsing="false" onAction="#ConsultarPorAutor" style="-fx-background-color: #51AFF7;" text="Consultar" />
    </children>
 </AnchorPane>

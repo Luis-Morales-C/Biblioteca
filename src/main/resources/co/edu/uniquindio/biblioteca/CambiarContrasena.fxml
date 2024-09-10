@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="456.0" prefWidth="458.0" style="-fx-background-color: #ffffff; -fx-border-color: #51AFF7; -fx-border-width: 3px;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.biblioteca.controller.CambiarContrasenaController">
+    <children>
+        <Label layoutX="93.0" layoutY="14.0" prefHeight="36.0" prefWidth="334.0" text="Cambio de contraseña">
+         <font>
+            <Font name="Arial" size="31.0" />
+         </font></Label>
+
+        <Text layoutX="219.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cedula" wrappingWidth="133.13671875" />
+        <TextField fx:id="cedulaInput" layoutX="111.0" layoutY="113.0" prefHeight="25.0" prefWidth="236.0" />
+        <Text layoutX="193.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contraseña Actual" wrappingWidth="133.13671875" />
+        <Text layoutX="180.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nueva Contraseña" wrappingWidth="133.13671875" />
+        <TextField fx:id="antiguaContrasena" layoutX="116.0" layoutY="202.0" prefHeight="25.0" prefWidth="236.0" />
+        <TextField fx:id="nuevaContrasena" layoutX="116.0" layoutY="292.0" prefHeight="25.0" prefWidth="236.0" />
+      <Button fx:id="btnAceptar" layoutX="178.0" layoutY="375.0" mnemonicParsing="false" onAction="#cambiarContrasena" prefHeight="49.0" prefWidth="101.0" style="-fx-background-color: #51AFF7;" text="Aceptar" />
+    </children>
+</AnchorPane>
