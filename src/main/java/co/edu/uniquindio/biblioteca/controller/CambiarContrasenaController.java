@@ -4,13 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 public class CambiarContrasenaController {
 
@@ -23,12 +24,14 @@ public class CambiarContrasenaController {
     @FXML
     private TextField nuevaContrasena;
 
-    // Método que se ejecuta cuando se presiona el botón "Aceptar"
+
+    private static final String RUTA_ARCHIVO = "src\\main\\java\\co\\edu\\uniquindio\\biblioteca\\archivos\\Estudiantes.txt";
+
     @FXML
     public void cambiarContrasena(ActionEvent event) {
-        String cedula = cedulaInput.getText();
-        String contrasenaActual = antiguaContrasena.getText();
-        String nueva = nuevaContrasena.getText();
+        String cedula = cedulaInput.getText().trim();
+        String contrasenaActual = antiguaContrasena.getText().trim();
+        String nueva = nuevaContrasena.getText().trim();
 
         if (cedula.isEmpty() || contrasenaActual.isEmpty() || nueva.isEmpty()) {
             System.out.println("Todos los campos deben estar llenos.");
@@ -36,40 +39,46 @@ public class CambiarContrasenaController {
         }
 
         try {
-            // Llamar al método para cambiar la contraseña en el archivo
-            boolean cambioExitoso = cambiarContrasenaEnArchivo(cedula, contrasenaActual, nueva);
+            // Validamos si la contraseña actual es correcta antes de cambiarla
+            boolean cambioExitoso = modificarContrasena(cedula, contrasenaActual, nueva);
             if (cambioExitoso) {
                 System.out.println("Contraseña cambiada exitosamente.");
             } else {
                 System.out.println("Error: La cédula o contraseña actual no coinciden.");
             }
         } catch (IOException e) {
+            System.out.println("Error al cambiar la contraseña: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // Método para cambiar la contraseña en el archivo de estudiantes
-    private boolean cambiarContrasenaEnArchivo(String cedula, String contrasenaActual, String nuevaContrasena) throws IOException {
-        String archivo = "co/edu/uniquindio/biblioteca/archivos/Estudiantes.txt";
+    public static boolean modificarContrasena(String cedula, String contrasenaActual,String nuevaContrasena) throws IOException {
+        // Leer todas las líneas del archivo
+        List<String> lineas = Files.readAllLines(Paths.get(RUTA_ARCHIVO));
+        List<String> nuevasLineas = new ArrayList<>();
 
-        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+        // Bandera para verificar si se encontró la cédula
+        boolean encontrado = false;
 
-        // Usamos un AtomicBoolean para poder modificar el valor dentro de la lambda
-        AtomicBoolean encontrado = new AtomicBoolean(false);
-
-        List<String> nuevasLineas = lineas.stream().map(linea -> {
-            String[] partes = linea.split(";");
-            if (partes[0].equals(cedula) && partes[1].equals(contrasenaActual)) {
-                encontrado.set(true);  // Marcar como encontrado
-                return partes[0] + ";" + nuevaContrasena;  // Actualiza la contraseña
+        // Iterar sobre cada línea para encontrar la cédula
+        for (String linea : lineas) {
+            String[] datos = linea.split(";");
+            if (datos[0].equals(cedula)) {
+                // Si la cédula coincide, cambiar la contraseña
+                nuevasLineas.add(cedula + ";" + nuevaContrasena);
+                encontrado = true;
+            } else {
+                // Si no coincide, mantener la línea original
+                nuevasLineas.add(linea);
             }
-            return linea;
-        }).collect(Collectors.toList());
-
-        if (encontrado.get()) {
-            Files.write(Paths.get(archivo), nuevasLineas, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
         }
 
-        return encontrado.get();
+        if (encontrado) {
+            Files.write(Paths.get(RUTA_ARCHIVO), nuevasLineas);
+            System.out.println("Contraseña modificada exitosamente.");
+        } else {
+            System.out.println("Cédula no encontrada.");
+        }
+        return encontrado;
     }
 }
