@@ -19,8 +19,8 @@ import java.util.List;
 
 public class InicioController {
     private static final String RUTA_LIBROS = "src\\main\\java\\co\\edu\\uniquindio\\biblioteca\\archivos\\Libros.txt";
-    private ObservableList<Libro> listaLibros;
-    public ArrayList<Libro> libros;
+    private ObservableList<Libro> listaLibros ;
+    public ArrayList<Libro> libros= new ArrayList<>();
     private EchoTCPClient cliente;
     private PrincipalCliente principalCliente;
 
@@ -115,33 +115,23 @@ public class InicioController {
     }
 
     private void actualizarTablaConRespuesta(String respuesta, String parametro, int n) {
-        System.out.println("Respuesta recibida para actualizar la tabla: " + respuesta);  // Agrega un mensaje para depuración
-        String[] lineas = respuesta.split("\n");
+        // Inicializar la lista de libros
+        libros.clear();
 
-        if(n==1){
-             libros = buscarLibrosPorNombre2(RUTA_LIBROS, parametro);
-        }
-        if (n==2) {
+        // Realizar la búsqueda en el archivo según el parámetro y tipo de búsqueda
+        if (n == 1) {
+            libros = buscarLibrosPorNombre2(RUTA_LIBROS, parametro);
+        } else if (n == 2) {
             libros = buscarLibrosPorGenero2(RUTA_LIBROS, parametro);
-        }
-        if (n==3) {
+        } else if (n == 3) {
             libros = buscarLibrosPorAutor2(RUTA_LIBROS, parametro);
         }
 
-        for (String linea : lineas) {
-            String[] partes = linea.split(";");
-            if (partes.length == 5) {
-                String id = partes[0];
-                String titulo = partes[1];
-                String autor = partes[2];
-                String tema = partes[3];
-                boolean disponible = "Disponible".equals(partes[4]);
-                libros.add(new Libro(id, titulo, autor, tema, disponible));
-            }
-        }
+        // Actualizar la lista observable
         listaLibros = FXCollections.observableArrayList(libros);
         tableLibros.setItems(listaLibros);
     }
+
 
     @FXML
     void ConsultarPorAutor(ActionEvent event) {
