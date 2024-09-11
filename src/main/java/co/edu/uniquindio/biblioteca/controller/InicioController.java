@@ -11,13 +11,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class InicioController {
-
+    private static final String RUTA_LIBROS = "src\\main\\java\\co\\edu\\uniquindio\\biblioteca\\archivos\\Libros.txt";
     private ObservableList<Libro> listaLibros;
+    public ArrayList<Libro> libros;
     private EchoTCPClient cliente;
     private PrincipalCliente principalCliente;
 
@@ -111,10 +114,20 @@ public class InicioController {
         }
     }
 
-    private void actualizarTablaConRespuesta(String respuesta) {
+    private void actualizarTablaConRespuesta(String respuesta, String parametro, int n) {
         System.out.println("Respuesta recibida para actualizar la tabla: " + respuesta);  // Agrega un mensaje para depuración
         String[] lineas = respuesta.split("\n");
-        List<Libro> libros = new ArrayList<>();
+
+        if(n==1){
+             libros = buscarLibrosPorNombre2(RUTA_LIBROS, parametro);
+        }
+        if (n==2) {
+            libros = buscarLibrosPorGenero2(RUTA_LIBROS, parametro);
+        }
+        if (n==3) {
+            libros = buscarLibrosPorAutor2(RUTA_LIBROS, parametro);
+        }
+
         for (String linea : lineas) {
             String[] partes = linea.split(";");
             if (partes.length == 5) {
@@ -133,10 +146,11 @@ public class InicioController {
     @FXML
     void ConsultarPorAutor(ActionEvent event) {
         try {
+            int n=3;
             String autor = txtAutor.getText();
             cliente.enviarMensaje("consultarAutor;" + autor);  // Asegúrate de incluir el delimitador
             String respuesta = cliente.leerMensaje();
-            actualizarTablaConRespuesta(respuesta);
+            actualizarTablaConRespuesta(respuesta, autor,3);
         } catch (IOException e) {
             labelRespuesta.setText("Error de comunicación con el servidor.");
         }
@@ -145,10 +159,12 @@ public class InicioController {
     @FXML
     void ConsultarPorGenero(ActionEvent event) {
         try {
+            int n =2;
             String genero = txtGenero.getText();
             cliente.enviarMensaje("consultarGenero;" + genero);  // Asegúrate de incluir el delimitador
             String respuesta = cliente.leerMensaje();
-            actualizarTablaConRespuesta(respuesta);
+            actualizarTablaConRespuesta(respuesta, genero,2);
+
         } catch (IOException e) {
             labelRespuesta.setText("Error de comunicación con el servidor.");
         }
@@ -157,14 +173,110 @@ public class InicioController {
     @FXML
     void consultarPorNombre(ActionEvent event) {
         try {
+            int n =1;
             String nombre = txtNombre.getText();
             cliente.enviarMensaje("consultarNombre;" + nombre);  // Asegúrate de incluir el delimitador
             String respuesta = cliente.leerMensaje();
-            actualizarTablaConRespuesta(respuesta);
+            actualizarTablaConRespuesta(respuesta, nombre,1);
         } catch (IOException e) {
             labelRespuesta.setText("Error de comunicación con el servidor.");
         }
     }
 
+    /////////////////////////////////////////////////
+    public static ArrayList<Libro> buscarLibrosPorGenero2(String rutaArchivo, String generoBuscado) {
+        ArrayList<Libro> librosFiltrados = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+            String linea;
+
+            // Leer cada línea del archivo
+            while ((linea = br.readLine()) != null) {
+                String[] datosLibro = linea.split(";"); // Separar por punto y coma
+
+                // Verificar si la línea tiene el formato correcto
+                if (datosLibro.length == 5) {
+                    String id = datosLibro[0];
+                    String titulo = datosLibro[1];
+                    String autor = datosLibro[2];
+                    String genero = datosLibro[3];
+                    boolean disponibilidad = Boolean.parseBoolean(datosLibro[4]);
+
+                    // Comparar el género del libro con el género buscado
+                    if (genero.equalsIgnoreCase(generoBuscado)) {
+                        Libro libro = new Libro(id, titulo, autor, genero, disponibilidad);
+                        librosFiltrados.add(libro); // Agregar a la lista filtrada
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(librosFiltrados+ "prueba");
+        return librosFiltrados; // Retornar la lista de libros filtrados por género
+    }
+    public static ArrayList<Libro> buscarLibrosPorAutor2(String rutaArchivo, String autorLibro) {
+        ArrayList<Libro> librosFiltrados = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+            String linea;
+
+            // Leer cada línea del archivo
+            while ((linea = br.readLine()) != null) {
+                String[] datosLibro = linea.split(";"); // Separar por punto y coma
+
+                // Verificar si la línea tiene el formato correcto
+                if (datosLibro.length == 5) {
+                    String id = datosLibro[0];
+                    String titulo = datosLibro[1];
+                    String autor = datosLibro[2];
+                    String genero = datosLibro[3];
+                    boolean disponibilidad = Boolean.parseBoolean(datosLibro[4]);
+
+                    // Comparar el autor del libro
+                    if (autor.equalsIgnoreCase(autorLibro)) {
+                        Libro libro = new Libro(id, titulo, autor, genero, disponibilidad);
+                        librosFiltrados.add(libro); // Agregar a la lista filtrada
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return librosFiltrados; // Retornar la lista de libros filtrados por autor
+    }
+    public static ArrayList<Libro> buscarLibrosPorNombre2(String rutaArchivo, String nombreLibro) {
+        ArrayList<Libro> librosFiltrados = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+            String linea;
+
+            // Leer cada línea del archivo
+            while ((linea = br.readLine()) != null) {
+                String[] datosLibro = linea.split(";"); // Separar por punto y coma
+
+                // Verificar si la línea tiene el formato correcto
+                if (datosLibro.length == 5) {
+                    String id = datosLibro[0];
+                    String titulo = datosLibro[1];
+                    String autor = datosLibro[2];
+                    String genero = datosLibro[3];
+                    boolean disponibilidad = Boolean.parseBoolean(datosLibro[4]);
+
+                    // Comparar el nombre del libro
+                    if (titulo.equalsIgnoreCase(nombreLibro)) {
+                        Libro libro = new Libro(id, titulo, autor, genero, disponibilidad);
+                        librosFiltrados.add(libro); // Agregar a la lista filtrada
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return librosFiltrados; // Retornar la lista de libros filtrados por nombre
+    }
 }
+
 

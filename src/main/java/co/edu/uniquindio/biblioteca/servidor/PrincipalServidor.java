@@ -60,16 +60,16 @@ public class PrincipalServidor {
                 .anyMatch(est -> est.getCodigo().equals(cedula) && est.getContrasena().equals(contrasena));
     }
 
-    public boolean cambiarContrasena(String cedula, String nuevaContrasena) {
-        for (Estudiante est : listaEstudiantes) {
-            if (est.getCodigo().equals(cedula)) {
-                est.setContrasena(nuevaContrasena);
-                guardarDatosEstudiantes();
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean cambiarContrasena(String cedula, String nuevaContrasena) {
+//        for (Estudiante est : listaEstudiantes) {
+//            if (est.getCodigo().equals(cedula)) {
+//                est.setContrasena(nuevaContrasena);
+//                guardarDatosEstudiantes();
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public void guardarDatosEstudiantes() {
         try {
