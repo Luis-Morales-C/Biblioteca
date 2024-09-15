@@ -1,6 +1,7 @@
 package co.edu.uniquindio.biblioteca.cliente;
 
 import co.edu.uniquindio.biblioteca.MainApp;
+import co.edu.uniquindio.biblioteca.modelo.Estudiante;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.application.Application;
@@ -8,9 +9,7 @@ import javafx.stage.Stage;
 
 public class PrincipalCliente extends Application {
 
-//1. Verificar  que la cedula exista, con la contraseña ingresada
-    //2. reescribir la contraseña
-
+    private Estudiante estudiante;
     private MainApp mainApp = new MainApp();
     private EchoTCPClient cliente;
     private static PrincipalCliente instance;
@@ -34,6 +33,14 @@ public class PrincipalCliente extends Application {
 
     public static PrincipalCliente getInstance() {
         return instance;
+    }
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 }
 

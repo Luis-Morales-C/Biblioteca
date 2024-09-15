@@ -39,7 +39,6 @@ public class CambiarContrasenaController {
         }
 
         try {
-            // Validamos si la contraseña actual es correcta antes de cambiarla
             boolean cambioExitoso = modificarContrasena(cedula, contrasenaActual, nueva);
             if (cambioExitoso) {
                 System.out.println("Contraseña cambiada exitosamente.");
@@ -57,18 +56,18 @@ public class CambiarContrasenaController {
         List<String> lineas = Files.readAllLines(Paths.get(RUTA_ARCHIVO));
         List<String> nuevasLineas = new ArrayList<>();
 
-        // Bandera para verificar si se encontró la cédula
+
         boolean encontrado = false;
 
-        // Iterar sobre cada línea para encontrar la cédula
+
         for (String linea : lineas) {
             String[] datos = linea.split(";");
             if (datos[0].equals(cedula)) {
-                // Si la cédula coincide, cambiar la contraseña
+
                 nuevasLineas.add(cedula + ";" + nuevaContrasena);
                 encontrado = true;
             } else {
-                // Si no coincide, mantener la línea original
+
                 nuevasLineas.add(linea);
             }
         }

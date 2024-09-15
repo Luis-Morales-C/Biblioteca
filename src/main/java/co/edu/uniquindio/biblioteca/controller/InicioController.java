@@ -2,6 +2,7 @@ package co.edu.uniquindio.biblioteca.controller;
 
 import co.edu.uniquindio.biblioteca.cliente.EchoTCPClient;
 import co.edu.uniquindio.biblioteca.cliente.PrincipalCliente;
+import co.edu.uniquindio.biblioteca.modelo.Estudiante;
 import co.edu.uniquindio.biblioteca.modelo.Libro;
 import co.edu.uniquindio.biblioteca.utils.ArchivoLibros;
 import javafx.collections.FXCollections;
@@ -22,7 +23,9 @@ public class InicioController {
     private ObservableList<Libro> listaLibros ;
     public ArrayList<Libro> libros= new ArrayList<>();
     private EchoTCPClient cliente;
+    private Estudiante estudiante;
     private PrincipalCliente principalCliente;
+
 
     @FXML
     private Button btnConsultarAutor;
@@ -69,13 +72,30 @@ public class InicioController {
     void reservar(ActionEvent event) {
         try {
             Libro libroSeleccionado = tableLibros.getSelectionModel().getSelectedItem();
+
             if (libroSeleccionado != null) {
+                if (!libroSeleccionado.isDisponible()) {
+                    labelRespuesta.setText("El libro seleccionado no está disponible.");
+                    return;
+                }
+
+                Estudiante estudiante = PrincipalCliente.getInstance().getEstudiante();
+
+                if (estudiante == null) {
+                    labelRespuesta.setText("No hay estudiante logueado.");
+                    return;
+                }
+
                 String idLibro = libroSeleccionado.getId();
+                String codigoEstudiante = estudiante.getCodigo();
                 cliente.enviarMensaje("reservar;" + idLibro);
                 String respuesta = cliente.leerMensaje();
+
                 if ("Reserva exitosa".equals(respuesta)) {
                     labelRespuesta.setText("Libro reservado exitosamente.");
-                    cargarLibrosEnTabla();
+                    libroSeleccionado.setDisponible(false);
+                    estudiante.agregarLibroReservado(libroSeleccionado);
+                    tableLibros.refresh();
                 } else {
                     labelRespuesta.setText("Error al reservar el libro.");
                 }
@@ -88,6 +108,7 @@ public class InicioController {
     }
 
 
+
     @FXML
     public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -98,9 +119,11 @@ public class InicioController {
 
         cargarLibrosEnTabla();
 
+        principalCliente = PrincipalCliente.getInstance();
 
-        cliente = PrincipalCliente.getInstance().getCliente();
+        cliente = principalCliente.getCliente();
     }
+
 
     private void cargarLibrosEnTabla() {
         try {
@@ -115,10 +138,9 @@ public class InicioController {
     }
 
     private void actualizarTablaConRespuesta(String respuesta, String parametro, int n) {
-        // Inicializar la lista de libros
         libros.clear();
 
-        // Realizar la búsqueda en el archivo según el parámetro y tipo de búsqueda
+
         if (n == 1) {
             libros = buscarLibrosPorNombre2(RUTA_LIBROS, parametro);
         } else if (n == 2) {
@@ -127,7 +149,7 @@ public class InicioController {
             libros = buscarLibrosPorAutor2(RUTA_LIBROS, parametro);
         }
 
-        // Actualizar la lista observable
+
         listaLibros = FXCollections.observableArrayList(libros);
         tableLibros.setItems(listaLibros);
     }
@@ -138,7 +160,7 @@ public class InicioController {
         try {
             int n=3;
             String autor = txtAutor.getText();
-            cliente.enviarMensaje("consultarAutor;" + autor);  // Asegúrate de incluir el delimitador
+            cliente.enviarMensaje("consultarAutor;" + autor);
             String respuesta = cliente.leerMensaje();
             actualizarTablaConRespuesta(respuesta, autor,3);
         } catch (IOException e) {
@@ -151,7 +173,7 @@ public class InicioController {
         try {
             int n =2;
             String genero = txtGenero.getText();
-            cliente.enviarMensaje("consultarGenero;" + genero);  // Asegúrate de incluir el delimitador
+            cliente.enviarMensaje("consultarGenero;" + genero);
             String respuesta = cliente.leerMensaje();
             actualizarTablaConRespuesta(respuesta, genero,2);
 
@@ -165,7 +187,7 @@ public class InicioController {
         try {
             int n =1;
             String nombre = txtNombre.getText();
-            cliente.enviarMensaje("consultarNombre;" + nombre);  // Asegúrate de incluir el delimitador
+            cliente.enviarMensaje("consultarNombre;" + nombre);
             String respuesta = cliente.leerMensaje();
             actualizarTablaConRespuesta(respuesta, nombre,1);
         } catch (IOException e) {
@@ -173,18 +195,17 @@ public class InicioController {
         }
     }
 
-    /////////////////////////////////////////////////
+
     public static ArrayList<Libro> buscarLibrosPorGenero2(String rutaArchivo, String generoBuscado) {
         ArrayList<Libro> librosFiltrados = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
 
-            // Leer cada línea del archivo
-            while ((linea = br.readLine()) != null) {
-                String[] datosLibro = linea.split(";"); // Separar por punto y coma
 
-                // Verificar si la línea tiene el formato correcto
+            while ((linea = br.readLine()) != null) {
+                String[] datosLibro = linea.split(";");
+
                 if (datosLibro.length == 5) {
                     String id = datosLibro[0];
                     String titulo = datosLibro[1];
@@ -192,10 +213,10 @@ public class InicioController {
                     String genero = datosLibro[3];
                     boolean disponibilidad = Boolean.parseBoolean(datosLibro[4]);
 
-                    // Comparar el género del libro con el género buscado
+
                     if (genero.equalsIgnoreCase(generoBuscado)) {
                         Libro libro = new Libro(id, titulo, autor, genero, disponibilidad);
-                        librosFiltrados.add(libro); // Agregar a la lista filtrada
+                        librosFiltrados.add(libro);
                     }
                 }
             }
@@ -203,7 +224,7 @@ public class InicioController {
             e.printStackTrace();
         }
         System.out.println(librosFiltrados+ "prueba");
-        return librosFiltrados; // Retornar la lista de libros filtrados por género
+        return librosFiltrados;
     }
     public static ArrayList<Libro> buscarLibrosPorAutor2(String rutaArchivo, String autorLibro) {
         ArrayList<Libro> librosFiltrados = new ArrayList<>();
@@ -211,11 +232,10 @@ public class InicioController {
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
 
-            // Leer cada línea del archivo
-            while ((linea = br.readLine()) != null) {
-                String[] datosLibro = linea.split(";"); // Separar por punto y coma
 
-                // Verificar si la línea tiene el formato correcto
+            while ((linea = br.readLine()) != null) {
+                String[] datosLibro = linea.split(";");
+
                 if (datosLibro.length == 5) {
                     String id = datosLibro[0];
                     String titulo = datosLibro[1];
@@ -223,10 +243,10 @@ public class InicioController {
                     String genero = datosLibro[3];
                     boolean disponibilidad = Boolean.parseBoolean(datosLibro[4]);
 
-                    // Comparar el autor del libro
+
                     if (autor.equalsIgnoreCase(autorLibro)) {
                         Libro libro = new Libro(id, titulo, autor, genero, disponibilidad);
-                        librosFiltrados.add(libro); // Agregar a la lista filtrada
+                        librosFiltrados.add(libro);
                     }
                 }
             }
@@ -234,7 +254,7 @@ public class InicioController {
             e.printStackTrace();
         }
 
-        return librosFiltrados; // Retornar la lista de libros filtrados por autor
+        return librosFiltrados;
     }
     public static ArrayList<Libro> buscarLibrosPorNombre2(String rutaArchivo, String nombreLibro) {
         ArrayList<Libro> librosFiltrados = new ArrayList<>();
@@ -242,11 +262,11 @@ public class InicioController {
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
 
-            // Leer cada línea del archivo
-            while ((linea = br.readLine()) != null) {
-                String[] datosLibro = linea.split(";"); // Separar por punto y coma
 
-                // Verificar si la línea tiene el formato correcto
+            while ((linea = br.readLine()) != null) {
+                String[] datosLibro = linea.split(";");
+
+
                 if (datosLibro.length == 5) {
                     String id = datosLibro[0];
                     String titulo = datosLibro[1];
@@ -257,7 +277,7 @@ public class InicioController {
                     // Comparar el nombre del libro
                     if (titulo.equalsIgnoreCase(nombreLibro)) {
                         Libro libro = new Libro(id, titulo, autor, genero, disponibilidad);
-                        librosFiltrados.add(libro); // Agregar a la lista filtrada
+                        librosFiltrados.add(libro);
                     }
                 }
             }
@@ -265,7 +285,18 @@ public class InicioController {
             e.printStackTrace();
         }
 
-        return librosFiltrados; // Retornar la lista de libros filtrados por nombre
+        return librosFiltrados;
+    }
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
+    }
+    public void setPrincipalCliente(PrincipalCliente principalCliente) {
+        this.principalCliente = principalCliente;
     }
 }
 

@@ -51,6 +51,8 @@ public class EchoTCPServer {
     private void procesarMensaje(String[] partes) {
         if (partes.length == 3 && "autenticar".equals(partes[0])) {
             autenticarUsuario(partes[1], partes[2]);
+        } else if (partes.length == 2 && "reservar".equals(partes[0])) {
+            reservarLibro(partes[1]);
         } else if (partes.length == 2) {
             procesarConsulta(partes[0], partes[1]);
         } else {
@@ -63,6 +65,13 @@ public class EchoTCPServer {
             responder("OK");
         } else {
             responder("Error");
+        }
+    }
+    private void reservarLibro(String idLibro) {
+        if (serv.reservarLibro(idLibro)) {
+            responder("Reserva exitosa");
+        } else {
+            responder("Error al reservar el libro");
         }
     }
 

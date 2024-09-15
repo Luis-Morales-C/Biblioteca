@@ -5,6 +5,7 @@ import co.edu.uniquindio.biblioteca.cliente.EchoTCPClient;
 
 
 import co.edu.uniquindio.biblioteca.cliente.PrincipalCliente;
+import co.edu.uniquindio.biblioteca.modelo.Estudiante;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,20 +30,32 @@ public class LoginController {
     void loginAction(ActionEvent event) {
         String cedula = txtCedula.getText();
         String contrasena = txtContrasena.getText();
+
+
         if (cedula.isEmpty() || contrasena.isEmpty()) {
             showAlert(AlertType.ERROR, "Error de Autenticación", "Por favor, ingrese cédula y contraseña.");
             return;
         }
 
         try {
+
             EchoTCPClient cliente = PrincipalCliente.getInstance().getCliente();
+
+
             cliente.enviarMensaje("autenticar;" + cedula + ";" + contrasena);
             String response = cliente.leerMensaje();
-            System.out.println("Respuesta del servidor:" + response);
+            System.out.println("Respuesta del servidor: " + response);
+
 
             if ("OK".equals(response)) {
-                MainApp.mostrarInicio(); // Método para mostrar la pantalla principal si la autenticación es exitosa
+
+                Estudiante estudianteLogueado = new Estudiante(cedula, contrasena);
+                PrincipalCliente.getInstance().setEstudiante(estudianteLogueado);
+
+
+                MainApp.mostrarInicio();
             } else {
+
                 showAlert(AlertType.ERROR, "Error de Autenticación", "Credenciales incorrectas.");
             }
         } catch (Exception e) {
@@ -51,16 +64,15 @@ public class LoginController {
         }
     }
 
-    // Nuevo método para manejar el evento del botón "Cambiar Contraseña"
+
+
 
     @FXML
     private void handleCambiarContrasena(ActionEvent event) {
         try {
-            // Cargar el archivo FXML de la ventana de cambiar contraseña
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/biblioteca/CambiarContrasena.fxml"));
             Parent root = loader.load();
-
-            // Crear una nueva ventana
             Stage stage = new Stage();
             stage.setTitle("Cambiar Contraseña");
             stage.setScene(new Scene(root));
@@ -71,7 +83,7 @@ public class LoginController {
         }
     }
 
-    // Método auxiliar para mostrar alertas
+
     private void showAlert(AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

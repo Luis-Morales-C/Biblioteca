@@ -1,6 +1,6 @@
 package co.edu.uniquindio.biblioteca.servidor;
 
-import co.edu.uniquindio.biblioteca.modelo.Estudiante;
+import  co.edu.uniquindio.biblioteca.modelo.Estudiante;
 import co.edu.uniquindio.biblioteca.modelo.Libro;
 import co.edu.uniquindio.biblioteca.utils.ArchivoEstudiantes;
 import co.edu.uniquindio.biblioteca.utils.ArchivoLibros;
@@ -60,16 +60,7 @@ public class PrincipalServidor {
                 .anyMatch(est -> est.getCodigo().equals(cedula) && est.getContrasena().equals(contrasena));
     }
 
-//    public boolean cambiarContrasena(String cedula, String nuevaContrasena) {
-//        for (Estudiante est : listaEstudiantes) {
-//            if (est.getCodigo().equals(cedula)) {
-//                est.setContrasena(nuevaContrasena);
-//                guardarDatosEstudiantes();
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+
 
     public void guardarDatosEstudiantes() {
         try {
