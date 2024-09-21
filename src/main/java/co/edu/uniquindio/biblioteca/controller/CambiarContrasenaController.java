@@ -2,6 +2,8 @@ package co.edu.uniquindio.biblioteca.controller;
 
 import co.edu.uniquindio.biblioteca.cliente.EchoTCPClient;
 import co.edu.uniquindio.biblioteca.cliente.PrincipalCliente;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -39,24 +41,32 @@ public class CambiarContrasenaController {
             return;
         }
 
-        try {
-            EchoTCPClient cliente = PrincipalCliente.getInstance().getCliente();
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+                try {
+                    EchoTCPClient cliente = PrincipalCliente.getInstance().getCliente();
+                    cliente.enviarMensaje("cambiarContrasena;" + cedula + ";" + contrasenaActual + ";" + nueva);
+                    String response = cliente.leerMensaje();
 
-            cliente.enviarMensaje("cambiarContrasena;" + cedula + ";" + contrasenaActual + ";" + nueva);
-
-            String response = cliente.leerMensaje();
-
-
-            if ("OK".equals(response)) {
-                showAlert(Alert.AlertType.INFORMATION, "Éxito", "Contraseña cambiada correctamente.");
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Error", response);
+                    Platform.runLater(() -> {
+                        if ("OK".equals(response)) {
+                            showAlert(Alert.AlertType.INFORMATION, "Éxito", "Contraseña cambiada correctamente.");
+                        } else {
+                            showAlert(Alert.AlertType.ERROR, "Error", response);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "Error", "No se pudo conectar con el servidor."));
+                }
+                return null;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "No se pudo conectar con el servidor.");
-        }
+        };
+
+        new Thread(task).start();
     }
+
 
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);

@@ -9,32 +9,3 @@
 9;La Divina Comedia;Dante Alighieri;Poesia epica;true
 10;El Gran Gatsby;F. Scott Fitzgerald;Novela;true
 11;Los Miserables;Victor Hugo;Novela historica;true
-12;Crimen y Castigo;Fiodor Dostoyevski;Novela;true
-13;El Senor de los Anillos;J.R.R. Tolkien;Fantasía;true
-14;Ulises;James Joyce;Novela;true
-15;Harry Potter y la Piedra Filosofal;J.K. Rowling;Fantasía;true
-16;El Hobbit;J.R.R. Tolkien;Fantasía;true
-17;El Alquimista;Paulo Coelho;Ficción;true
-18;La Metamorfosis;Franz Kafka;Ficción;true
-19;Fahrenheit 451;Ray Bradbury;Ciencia Ficción;true
-20;El Guardián entre el Centeno;J.D. Salinger;Novela;true
-21;El Ingenioso Hidalgo Don Quijote de la Mancha;Miguel de Cervantes;Novela;false
-22;Crónica de una muerte anunciada;Gabriel Garcia Marquez;Novela;true
-23;La Celestina;Fernando de Rojas;Teatro;true
-24;Asesinato en el Orient Express;Agatha Christie;Misterio;true
-25;El Cantar de los Cantares;Tirso de Molina;Teatro;true
-26;El Principito;Antoine de Saint-Exupery;Fabula;true
-27;Rebelión en la Granja;George Orwell;Distopia;true
-28;Sentido y Sensibilidad;Jane Austen;Novela;true
-29;Inferno;Dante Alighieri;Poesía epica;true
-30;El Sueño de una Noche de Verano;William Shakespeare;Teatro;true
-31;Las Aventuras de Tom Sawyer;Mark Twain;Aventura;true
-32;La Historia Interminable;Michael Ende;Fantasía;true
-33;Las Cronicas de Narnia;C.S. Lewis;Fantasía;true
-34;Mujercitas;Louisa May Alcott;Novela;true
-35;El Retrato de Dorian Gray;Oscar Wilde;Novela;true
-36;1984;George Orwell;Distopia;true
-37;La Casa de los Espíritus;Isabel Allende;Novela;true
-38;El Amor en los Tiempos del Colera;Gabriel Garcia Marquez;Novela;true
-39;La Isla del Tesoro;Robert Louis Stevenson;Aventura;true
-40;El Principito;Antoine de Saint-Exupery;Fabula;true
