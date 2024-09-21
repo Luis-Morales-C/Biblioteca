@@ -14,8 +14,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class EchoTCPClient {
-    private static final String SERVER = "localhost";
-    private static final int PORT = 3400;
+    private static final String SERVER = "serveo.net";
+    private static final int PORT = 1400;
 
     private PrintWriter toNetwork;
     private BufferedReader fromNetwork;

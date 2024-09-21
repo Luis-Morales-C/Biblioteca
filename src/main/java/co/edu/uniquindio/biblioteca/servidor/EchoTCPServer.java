@@ -19,7 +19,7 @@ import java.net.Socket;
 import java.util.List;
 
 public class EchoTCPServer {
-    public static final int PORT = 3400;
+    public static final int PORT = 1400;
     private ServerSocket listener;
     private PrintWriter toNetwork;
     private BufferedReader fromNetwork;
