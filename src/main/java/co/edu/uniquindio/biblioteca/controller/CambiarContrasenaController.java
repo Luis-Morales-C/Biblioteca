@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -25,10 +26,16 @@ import java.util.List;
 public class CambiarContrasenaController {
 
     @FXML
-    private TextField cedulaInput;
+    private TextField antiguaContrasena;
 
     @FXML
-    private TextField antiguaContrasena;
+    private Button btnAceptar;
+
+    @FXML
+    private Button btnDevolver;
+
+    @FXML
+    private TextField cedulaInput;
 
     @FXML
     private TextField nuevaContrasena;

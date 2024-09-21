@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -25,6 +26,12 @@ public class LoginController {
 
     @FXML
     private TextField txtContrasena;
+
+    @FXML
+    private Button btnCambiar;
+
+    @FXML
+    private Button btnIngresar;
 
     @FXML
     void loginAction(ActionEvent event) {

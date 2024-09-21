@@ -41,8 +41,10 @@ public class InicioController {
     private Button btnConsultarNombre;
 
     @FXML
-    private Button btnReservar;
+    private Button btnDevolver;
 
+    @FXML
+    private Button btnReservar;
     @FXML
     private TableView<Libro> tableLibros;
 
@@ -71,6 +73,7 @@ public class InicioController {
 
     @FXML
     private TextField txtNombre;
+
 
     @FXML
     void devolver(ActionEvent event) {
