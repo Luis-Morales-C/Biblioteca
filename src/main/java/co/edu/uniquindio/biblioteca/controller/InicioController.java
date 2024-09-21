@@ -90,6 +90,8 @@ public class InicioController {
                 String codigoEstudiante = estudiante.getCodigo();
                 cliente.enviarMensaje("reservar;" + idLibro);
                 String respuesta = cliente.leerMensaje();
+                System.out.println("Libro seleccionado: " + libroSeleccionado.getId() +"Disponible:" + libroSeleccionado.isDisponible());
+
 
                 if ("Reserva exitosa".equals(respuesta)) {
                     labelRespuesta.setText("Libro reservado exitosamente.");
@@ -139,8 +141,6 @@ public class InicioController {
 
     private void actualizarTablaConRespuesta(String respuesta, String parametro, int n) {
         libros.clear();
-
-
         if (n == 1) {
             libros = buscarLibrosPorNombre2(RUTA_LIBROS, parametro);
         } else if (n == 2) {

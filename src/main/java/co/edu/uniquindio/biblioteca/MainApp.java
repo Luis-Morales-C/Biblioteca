@@ -56,6 +56,14 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
+    public static void showPasswordScreen() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("Login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 400, 400);
+        primaryStage.setTitle("Login");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     // Método para mostrar la pantalla de inicio
     public static void mostrarInicio() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("Inicio.fxml"));

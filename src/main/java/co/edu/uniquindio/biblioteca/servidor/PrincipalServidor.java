@@ -106,4 +106,14 @@ public class PrincipalServidor {
             System.err.println("Error al guardar datos de libros: " + e.getMessage());
         }
     }
+    public boolean cambiarContrasena(String cedula, String contrasenaActual, String nuevaContrasena) {
+        for (Estudiante estudiante : listaEstudiantes) {
+            if (estudiante.getCodigo().equals(cedula) && estudiante.getContrasena().equals(contrasenaActual)) {
+                estudiante.setContrasena(nuevaContrasena);
+                guardarDatosEstudiantes();
+                return true;
+            }
+        }
+        return false;
+    }
 }

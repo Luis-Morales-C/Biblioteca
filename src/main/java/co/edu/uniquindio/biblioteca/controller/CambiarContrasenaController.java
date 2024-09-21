@@ -1,7 +1,10 @@
 package co.edu.uniquindio.biblioteca.controller;
 
+import co.edu.uniquindio.biblioteca.cliente.EchoTCPClient;
+import co.edu.uniquindio.biblioteca.cliente.PrincipalCliente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
 import java.io.*;
@@ -25,59 +28,41 @@ public class CambiarContrasenaController {
     private TextField nuevaContrasena;
 
 
-    private static final String RUTA_ARCHIVO = "src\\main\\java\\co\\edu\\uniquindio\\biblioteca\\archivos\\Estudiantes.txt";
-
     @FXML
-    public void cambiarContrasena(ActionEvent event) {
-        String cedula = cedulaInput.getText().trim();
-        String contrasenaActual = antiguaContrasena.getText().trim();
-        String nueva = nuevaContrasena.getText().trim();
+    void cambiarContrasena(ActionEvent event) {
+        String cedula = cedulaInput.getText();
+        String contrasenaActual = antiguaContrasena.getText();
+        String nueva = nuevaContrasena.getText();
 
         if (cedula.isEmpty() || contrasenaActual.isEmpty() || nueva.isEmpty()) {
-            System.out.println("Todos los campos deben estar llenos.");
+            showAlert(Alert.AlertType.ERROR, "Error", "Por favor, complete todos los campos.");
             return;
         }
 
         try {
-            boolean cambioExitoso = modificarContrasena(cedula, contrasenaActual, nueva);
-            if (cambioExitoso) {
-                System.out.println("Contraseña cambiada exitosamente.");
+            EchoTCPClient cliente = PrincipalCliente.getInstance().getCliente();
+
+            cliente.enviarMensaje("cambiarContrasena;" + cedula + ";" + contrasenaActual + ";" + nueva);
+
+            String response = cliente.leerMensaje();
+
+
+            if ("OK".equals(response)) {
+                showAlert(Alert.AlertType.INFORMATION, "Éxito", "Contraseña cambiada correctamente.");
             } else {
-                System.out.println("Error: La cédula o contraseña actual no coinciden.");
+                showAlert(Alert.AlertType.ERROR, "Error", response);
             }
-        } catch (IOException e) {
-            System.out.println("Error al cambiar la contraseña: " + e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "No se pudo conectar con el servidor.");
         }
     }
 
-    public static boolean modificarContrasena(String cedula, String contrasenaActual,String nuevaContrasena) throws IOException {
-        // Leer todas las líneas del archivo
-        List<String> lineas = Files.readAllLines(Paths.get(RUTA_ARCHIVO));
-        List<String> nuevasLineas = new ArrayList<>();
-
-
-        boolean encontrado = false;
-
-
-        for (String linea : lineas) {
-            String[] datos = linea.split(";");
-            if (datos[0].equals(cedula)) {
-
-                nuevasLineas.add(cedula + ";" + nuevaContrasena);
-                encontrado = true;
-            } else {
-
-                nuevasLineas.add(linea);
-            }
-        }
-
-        if (encontrado) {
-            Files.write(Paths.get(RUTA_ARCHIVO), nuevasLineas);
-            System.out.println("Contraseña modificada exitosamente.");
-        } else {
-            System.out.println("Cédula no encontrada.");
-        }
-        return encontrado;
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

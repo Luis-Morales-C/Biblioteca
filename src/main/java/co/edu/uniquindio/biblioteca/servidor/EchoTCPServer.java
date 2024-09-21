@@ -53,12 +53,24 @@ public class EchoTCPServer {
             autenticarUsuario(partes[1], partes[2]);
         } else if (partes.length == 2 && "reservar".equals(partes[0])) {
             reservarLibro(partes[1]);
+        } else if (partes.length == 4 && "cambiarContrasena".equals(partes[0])) {
+            cambiarContrasena(partes[1], partes[2], partes[3]);
         } else if (partes.length == 2) {
             procesarConsulta(partes[0], partes[1]);
         } else {
             responder("Comando inválido");
         }
     }
+
+    private void cambiarContrasena(String cedula, String contrasenaActual, String nuevaContrasena) {
+        boolean resultado = serv.cambiarContrasena(cedula, contrasenaActual, nuevaContrasena);
+        if (resultado) {
+            responder("OK");
+        } else {
+            responder("Cédula o contraseña actual incorrectas.");
+        }
+    }
+
 
     private void autenticarUsuario(String cedula, String contrasena) {
         if (serv.autenticarEstudiante(cedula, contrasena)) {
@@ -113,9 +125,7 @@ public class EchoTCPServer {
         toNetwork = new PrintWriter(socket.getOutputStream(), true);
         fromNetwork = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
-
     private void responder(String res) {
         toNetwork.println(res);
     }
-
 }
