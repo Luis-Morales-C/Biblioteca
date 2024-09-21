@@ -35,5 +35,6 @@
       <Button fx:id="btnConsultarGenero" layoutX="167.0" layoutY="167.0" mnemonicParsing="false" onAction="#ConsultarPorGenero" style="-fx-background-color: #51AFF7;" text="Consultar" />
       <Button fx:id="btnConsultarAutor" layoutX="167.0" layoutY="246.0" mnemonicParsing="false" onAction="#ConsultarPorAutor" style="-fx-background-color: #51AFF7;" text="Consultar" />
       <Label fx:id="labelRespuesta" layoutX="8.0" layoutY="314.0" prefHeight="89.0" prefWidth="223.0" />
+      <Button layoutX="160.0" layoutY="352.0" mnemonicParsing="false" onAction="#devolver" prefHeight="43.0" prefWidth="149.0" style="-fx-background-color: #51AFF7;" text="Devolver" />
    </children>
 </AnchorPane>
